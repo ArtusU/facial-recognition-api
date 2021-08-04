@@ -14,6 +14,11 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:3000',
-)
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
+]
+
+STRIPE_PUBLISH_KEY = ''
+STRIPE_SECRET_KEY = ''
