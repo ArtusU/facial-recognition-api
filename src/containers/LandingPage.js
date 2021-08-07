@@ -87,7 +87,7 @@ const HomepageLayout = () => (
             </Grid.Column>
             <Grid.Column width={7}>
               <Header as="h4" inverted>
-                Facial recognition SAAS
+                Facial recognition API
               </Header>
               <p>Find faces in your images</p>
             </Grid.Column>
