@@ -1,6 +1,7 @@
-let DEBUG = false;
+let DEBUG = true;
 let host = "http://127.0.0.1:8000";
 let stripePublishKey = "";
+
 if (DEBUG === false) {
   host = "";
   stripePublishKey = "";
