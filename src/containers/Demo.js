@@ -15,8 +15,8 @@ import {
 import axios from "axios";
 import { authAxios } from "../utils";
 import { fileUploadURL, facialRecognitionURL } from "../constants";
-// import FaceIMG from "../assets/images/face.png";
-// import ShortParagraphIMG from "../assets/images/short_paragraph.png";
+import FaceIMG from "../assets/images/face.png";
+import ShortParagraphIMG from "../assets/images/short_paragraph.png";
 
 class Demo extends React.Component {
   state = {
@@ -125,10 +125,10 @@ class Demo extends React.Component {
               <Button primary type="submit">
                 Upload
               </Button>
-              {/* <a className="ui button" href={FaceIMG} download>
+              <a className="ui button" href={FaceIMG} download>
                 <i aria-hidden="true" className="download icon" />
                 Download test image
-              </a> */}
+              </a>
             </Form.Field>
           </Form>
           {error && (
@@ -138,8 +138,8 @@ class Demo extends React.Component {
         <Segment vertical>
           <Divider horizontal>Endpoint</Divider>
           <p>
-            {/* POST to {facialRecognitionURL} with headers: "Authentication":
-            "Token {"<your_token>"}" */}
+            POST to {facialRecognitionURL} with headers: "Authentication":
+            "Token {"<your_token>"}"
           </p>
         </Segment>
         <Segment vertical>
@@ -157,10 +157,10 @@ class Demo extends React.Component {
         </Segment>
         {spinner && (
           <Segment>
-            {/* <Dimmer active inverted>
+            <Dimmer active inverted>
               <Loader inverted>Detecting faces...</Loader>
             </Dimmer>
-            <Image src={ShortParagraphIMG} /> */}
+            <Image src={ShortParagraphIMG} />
           </Segment>
         )}
         {data && (
