@@ -60,9 +60,10 @@ class ChangeEmail extends React.Component {
       });
     } else {
       if (email === confirmEmail) {
-        authAxios.post(changeEmailURL, {
+        authAxios
+        .post(changeEmailURL, {
           email,
-          confirmEmail
+          confirm_email: confirmEmail
         })
         .then(res => {
           this.setState({
