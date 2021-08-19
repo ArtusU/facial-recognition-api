@@ -76,3 +76,15 @@ class ChangePasswordView(APIView):
                     return Response({"message": "The passwords did not match"}, status=HTTP_400_BAD_REQUEST)
             return Response({"message": "Incorrect user details"}, status=HTTP_400_BAD_REQUEST)
         return Response({"message": "Did not receive the correct data"}, status=HTTP_400_BAD_REQUEST)
+
+
+class UserDetailsView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, *args, **kwargs):
+        user = get_user_from_token(request)
+        obj = {
+            'membershipType': 'free_trial',
+        }
+
+        return Response(obj)

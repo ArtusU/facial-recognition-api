@@ -26,6 +26,10 @@ class Billing extends React.Component {
         billingDetails: {}
     };
 
+    componentDidMount() {
+        this.handleUserDetails();
+    }
+
 
     handleUserDetails = () => {
         this.setState({
@@ -45,7 +49,7 @@ class Billing extends React.Component {
               error: err.response.data.message
             });
           });
-      };
+    };
 
 
     renderBillingDetails(details) {
@@ -56,11 +60,21 @@ class Billing extends React.Component {
             <Segment>
                 <Header as="h3">Monthly Summary</Header>
                 {details.membershipType === free_trial ? (
-                    <React.Fragment>
-                        <p>Your free trial ends on 19 of June 2021</p>
-                        <p>API requests this month:20 </p>
-                    </React.Fragment>
-                ) : null }
+                  <React.Fragment>
+                      <p>Your free trial ends on 19 of June 2021</p>
+                      <p>API requests this month:20 </p>
+                  </React.Fragment>
+                ) : details.membershipType === member ? (
+                  <React.Fragment>
+                    <p>Next billing date: 15 September 2021</p>
+                    <p>API requests this month: 233</p>
+                    <p>Amount due: £150</p>
+                  </React.Fragment>
+                ) : details.membershipType === not_member ? (
+                  <React.Fragment>
+                    <p>Your free trial has ended</p>
+                  </React.Fragment>
+                ) : null}
             </Segment>
 
         )
@@ -73,17 +87,23 @@ class Billing extends React.Component {
         return (
             <Shell>
                 {error && (
-                    <Segment placeholder>
-                        <Header icon><Icon name='rocket' />Could not fetch your account details. try reloading the page</Header>
-                    </Segment>
+                  <Segment placeholder>
+                    <Header icon>
+                      <Icon name='rocket' />
+                      Could not fetch your account details. Try reloading the page
+                    </Header>
+                    <a href="/account/billing/">
+                      <Button primary>Reload</Button>
+                    </a>
+                  </Segment>
                 )}
                 {loading && (
-                    <Segment>
-                        <Dimmer active inverted>
-                            <Loader inverted>Detecting faces...</Loader>
-                        </Dimmer>
-                        <Image src={ShortParagraphIMG} />
-                    </Segment>
+                  <Segment>
+                      <Dimmer active inverted>
+                          <Loader inverted>Detecting faces...</Loader>
+                      </Dimmer>
+                      <Image src={ShortParagraphIMG} />
+                  </Segment>
                 )}
                 {billingDetails && this.renderBillingDetails(billingDetails)}
             </Shell>
