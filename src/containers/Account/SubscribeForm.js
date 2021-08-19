@@ -26,8 +26,11 @@ class StripeForm extends React.Component {
             loading: false
           });
         } else {
+          console.log(result);
           authAxios
-            .post(subscribeURL)
+            .post(subscribeURL, {
+              stripeToken: result.token.id
+            })
             .then(res => {
               this.setState({
                 loading: false

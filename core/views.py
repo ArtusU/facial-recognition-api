@@ -95,6 +95,7 @@ class SubscribeView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = get_user_from_token(request)
+        print(request.data)
         return Response({
             'test': True,
         })
