@@ -88,3 +88,13 @@ class UserDetailsView(APIView):
         }
 
         return Response(obj)
+
+
+class SubscribeView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request, *args, **kwargs):
+        user = get_user_from_token(request)
+        return Response({
+            'test': True,
+        })

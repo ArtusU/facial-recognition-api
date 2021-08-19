@@ -11,6 +11,7 @@ import {
     Modal
 } from "semantic-ui-react";
 import Shell from "./Shell";
+import SubscribeForm from "./SubscribeForm";
 import ShortParagraphIMG from "../../assets/images/short_paragraph.png";
 import { authAxios } from "../../utils";
 import { billingURL } from "../../constants";
@@ -63,6 +64,7 @@ class Billing extends React.Component {
                   <React.Fragment>
                       <p>Your free trial ends on 19 of June 2021</p>
                       <p>API requests this month:20 </p>
+                      <SubscribeForm handleUserDetails={this.handleUserDetails} />
                   </React.Fragment>
                 ) : details.membershipType === member ? (
                   <React.Fragment>
@@ -73,6 +75,7 @@ class Billing extends React.Component {
                 ) : details.membershipType === not_member ? (
                   <React.Fragment>
                     <p>Your free trial has ended</p>
+                    <SubscribeForm handleUserDetails={this.handleUserDetails} />
                   </React.Fragment>
                 ) : null}
             </Segment>
