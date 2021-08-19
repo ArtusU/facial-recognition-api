@@ -50,7 +50,7 @@ class ChangeEmailView(APIView):
                 user.save()
                 return Response({"email": email}, status=HTTP_200_OK)
             return Response({"message": "The email did not match"}, status=HTTP_400_BAD_REQUEST)
-        return Response({"message": "Did not receive the corect data"}, status=HTTP_400_BAD_REQUEST)
+        return Response({"message": "Did not receive the correct data"}, status=HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(APIView):

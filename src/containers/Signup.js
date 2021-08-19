@@ -24,7 +24,6 @@ class RegistrationForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { username, email, password, confirmPassword } = this.state;
-    console.log(username, email, password, confirmPassword);
     if (
       username !== "" &&
       email !== "" &&

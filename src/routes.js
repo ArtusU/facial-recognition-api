@@ -8,6 +8,7 @@ import LandingPage from "./containers/LandingPage";
 import Demo from "./containers/Demo";
 import ChangeEmail from "./containers/Account/ChangeEmail";
 import ChangePassword from "./containers/Account/ChangePassword";
+import Billing from "./containers/Account/Billing";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const authenticated = localStorage.getItem("token") !== null;
@@ -38,6 +39,7 @@ const BaseRouter = () => (
     <Route path="/demo/" component={Demo} />
     <PrivateRoute path="/account/change-email" component={ChangeEmail}/>
     <PrivateRoute path="/account/change-password" component={ChangePassword}/>
+    <PrivateRoute path="/account/billing" component={Billing}/>
   </Hoc>
 );
 
