@@ -10,7 +10,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 MEMBERSHIP_CHOICES = (
-    ('f', 'free_trial'),
+    ('F', 'free_trial'),
     ('M', 'member'),
     ('N', 'not_member')
 )

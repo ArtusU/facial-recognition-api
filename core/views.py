@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
+from .models import Membership
 from .serializers import ChangeEmailSerializer, ChangePasswordSerializer
 
 
@@ -83,8 +84,10 @@ class UserDetailsView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = get_user_from_token(request)
+        membership = user.membership
         obj = {
-            'membershipType': 'free_trial',
+            'membershipType': membership.get_type_display(),
+            'free_trial_end_date': membership.end_date
         }
 
         return Response(obj)
