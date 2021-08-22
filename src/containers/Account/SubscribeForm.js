@@ -79,7 +79,7 @@ const WrappedStripeForm = injectStripe(StripeForm);
 class SubscribeForm extends React.Component {
   render() {
     return (
-      <StripeProvider apiKey="null">
+      <StripeProvider apiKey="pk_test_51HVHJwGjLUpjNrZJDqvwOaunx2iEyXPdWmePrvoXFBbr8qDXcp9csZyVXNkxOYZCAfcDWWbFXo8QE7teREJEAaTC00yl1qLyO4">
         <div>
           <Elements>
             <WrappedStripeForm {...this.props}/>

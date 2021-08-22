@@ -1,5 +1,6 @@
 '''Use this for development'''
 
+from decouple import config
 from .base import *
 
 ALLOWED_HOSTS += ['127.0.0.1', 'localhost']
@@ -20,5 +21,5 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
 ]
 
-STRIPE_PUBLISH_KEY = ''
-STRIPE_SECRET_KEY = ''
+STRIPE_PUBLISH_KEY = config('STRIPE_PUBLISH_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
