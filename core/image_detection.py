@@ -21,11 +21,7 @@ def detect_faces(image_path=None, url=None):
         return default
     image_to_read = cv2.cvtColor(image_to_read, cv2.COLOR_BGR2GRAY)
     detector_value = cv2.CascadeClassifier(face_detector)
-    values = detector_value.detectMultiScale(image_to_read,
-                                             scaleFactor=1.1,
-                                             minNeighbors=5,
-                                             minSize=(30, 30),
-                                             flags=cv2.CASCADE_SCALE_IMAGE)
+    values = detector_value.detectMultiScale(image_to_read, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
     values = [(int(a), int(b), int(a + c), int(b + d))
               for (a, b, c, d) in values]
     default.update({"number_of_faces": len(values),

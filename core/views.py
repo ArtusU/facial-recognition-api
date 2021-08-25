@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from .image_detection import detect_faces
 from .models import Membership
-from .serializers import ChangeEmailSerializer, ChangePasswordSerializer
+from .serializers import ChangeEmailSerializer, ChangePasswordSerializer, FileSerializer
 
 
 User = get_user_model()
@@ -26,8 +26,12 @@ class FileUploadView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
-        
-        return Response({"test": True}, status=HTTP_200_OK)
+        file_serializer = FileSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            image_path = file_serializer.data.get('file')
+            recognition = detect_faces(image_path)
+        return Response(recognition, status=HTTP_200_OK)
 
 
 class UserEmailView(APIView):
