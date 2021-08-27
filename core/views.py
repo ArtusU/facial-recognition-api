@@ -8,6 +8,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from .image_detection import detect_faces
+from .permissions import IsMember
 from .models import Membership
 from .serializers import ChangeEmailSerializer, ChangePasswordSerializer, FileSerializer
 
@@ -26,6 +27,11 @@ class FileUploadView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
+
+        content_length = request.META.get('CONTENT_LENGTH')  # bytes
+        if int(content_length) > 5000000:
+            return Response({"message": "Image size is greater than 5MB"}, status=HTTP_400_BAD_REQUEST)
+
         file_serializer = FileSerializer(data=request.data)
         if file_serializer.is_valid():
             file_serializer.save()
@@ -111,9 +117,14 @@ class SubscribeView(APIView):
 
 
 class ImageRecognitionView(APIView):
-    permission_classes = (AllowAny, )
+    permission_classes = (IsMember, )
 
     def post(self, request, *args, **kwargs):
+
+        content_length = request.META.get('CONTENT_LENGTH')
+        if int(content_length) > 5000000:
+            return Response({"message": "Image size is greater then 5MB"}, status=HTTP_400_BAD_REQUEST)
+
         file_serializer = FileSerializer(data=request.data)
         if file_serializer.is_valid():
             file_serializer.save()

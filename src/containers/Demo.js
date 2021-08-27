@@ -107,7 +107,7 @@ class Demo extends React.Component {
                 <Button.Content visible>
                   <Icon name="file" />
                 </Button.Content>
-                <Button.Content hidden>Choose a File (Max 2MB)</Button.Content>
+                <Button.Content hidden>Choose a File (Max 5MB)</Button.Content>
               </Button>
               <input
                 id="file"
