@@ -108,3 +108,15 @@ class SubscribeView(APIView):
         return Response({
             'test': True,
         })
+
+
+class ImageRecognitionView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = FileSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            image_path = file_serializer.data.get('file')
+            recognition = detect_faces(image_path)
+        return Response(recognition, status=HTTP_200_OK)
