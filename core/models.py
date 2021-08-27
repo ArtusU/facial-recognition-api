@@ -25,7 +25,7 @@ class File(models.Model):
 
 class User(AbstractUser):
     is_member = models.BooleanField(default=False)
-    on_free_tail = models.BooleanField(default=True)
+    on_free_trial = models.BooleanField(default=True)
     stripe_customer_id = models.CharField(max_length=40)
 
 
