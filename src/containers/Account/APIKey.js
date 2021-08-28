@@ -1,13 +1,13 @@
 import React from "react";
 import {
-    Segment,
-    Header,
-    Icon,
-    Dimmer,
-    Loader,
-    Image,
-    Button,
-    Message
+  Segment,
+  Header,
+  Icon,
+  Dimmer,
+  Loader,
+  Image,
+  Button,
+  Message
 } from "semantic-ui-react";
 import Shell from "./Shell";
 import ShortParagraphIMG from "../../assets/images/short_paragraph.png";
@@ -45,13 +45,13 @@ class APIKey extends React.Component {
 
   render() {
     const { loading, error, keys } = this.state;
-    return(
+    return (
       <Shell>
         {error && <Message error header="There was an error" content={error} />}
         {loading && (
           <Segment>
             <Dimmer active inverted>
-            <Loader inverted>Detecting faces...</Loader>
+              <Loader inverted>Detecting faces...</Loader>
             </Dimmer>
             <Image src={ShortParagraphIMG} />
           </Segment>
@@ -59,12 +59,13 @@ class APIKey extends React.Component {
         {keys && (
           <Segment>
             <Header as="h3">API Key</Header>
-              <p> key: { key }</p>
-            )}
+            {keys.map(k => {
+              return <p key={k.pk}>{k.key}</p>;
+            })}
           </Segment>
         )}
       </Shell>
-    )
+    );
   }
 }
 
