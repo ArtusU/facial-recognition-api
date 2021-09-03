@@ -117,10 +117,16 @@ class UserDetailsView(APIView):
             .filter(user=user, timestamp__gte=month_start) \
             .count()
 
+        amount_due = 0
+        if user.is_member:
+            amount_due = stripe.Invoice.upcoming(
+                customer=user.stripe_customer_id)['amount_due'] / 100
         obj = {
             'membershipType': membership.get_type_display(),
             'free_trial_end_date': membership.end_date,
-            'api_request_count': tracked_request_count
+            'next_billing_date': membership.end_date,
+            'api_request_count': tracked_request_count,
+            'amount_due': amount_due
         }
 
         return Response(obj)
@@ -203,15 +209,6 @@ class ImageRecognitionView(APIView):
                 timestamp=math.floor(datetime.datetime.now().timestamp())
             )
             usage_record_id = usage_record.id
-
-        # usage_record_id = None
-        # if user.is_member and not user.on_free_trial:
-        #     usage_record = stripe.UsageRecord.create(
-        #         quantity=1,
-        #         timestamp=math.floor(datetime.datetime.now().timestamp()),
-        #         subscription_item=membership.stripe_subscription_item_id
-        #     )
-        #     usage_record_id = usage_record.id
 
         tracked_request = TrackedRequest()
         tracked_request.user = user
