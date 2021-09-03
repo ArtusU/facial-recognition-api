@@ -1,4 +1,5 @@
 import datetime
+import math
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth import get_user_model, authenticate
@@ -191,10 +192,30 @@ class ImageRecognitionView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = get_user_from_token(request)
+        membership = user.membership
         file_serializer = FileSerializer(data=request.data)
+
+        usage_record_id = None
+        if user.is_member and not user.on_free_trial:
+            usage_record = stripe.SubscriptionItem.create_usage_record(
+                membership.stripe_subscription_item_id,
+                quantity=1,
+                timestamp=math.floor(datetime.datetime.now().timestamp())
+            )
+            usage_record_id = usage_record.id
+
+        # usage_record_id = None
+        # if user.is_member and not user.on_free_trial:
+        #     usage_record = stripe.UsageRecord.create(
+        #         quantity=1,
+        #         timestamp=math.floor(datetime.datetime.now().timestamp()),
+        #         subscription_item=membership.stripe_subscription_item_id
+        #     )
+        #     usage_record_id = usage_record.id
 
         tracked_request = TrackedRequest()
         tracked_request.user = user
+        tracked_request.usage_record_id = usage_record_id
         tracked_request.endpoint = '/api/image-recognition/'
         tracked_request.save()
 

@@ -18,7 +18,6 @@ import { billingURL } from "../../constants";
 
 
 
-
 class Billing extends React.Component {
 
     state = {
