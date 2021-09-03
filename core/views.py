@@ -2,23 +2,31 @@ import datetime
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth import get_user_model, authenticate
+from rest_framework import serializers
+from rest_framework import response
 
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
+from stripe.api_resources import customer
 
 from .image_detection import detect_faces
 from .permissions import IsMember
-from .models import Membership, TrackedRequest
-from .serializers import ChangeEmailSerializer, ChangePasswordSerializer, FileSerializer, TokenSerializer
+from .models import Membership, TrackedRequest, Payment
+from .serializers import (
+    ChangeEmailSerializer,
+    ChangePasswordSerializer,
+    FileSerializer,
+    TokenSerializer,
+    SubscribeSerializer
+)
 
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 User = get_user_model()
-stripe_plan_id = 'price_1JVZNbGjLUpjNrZJoxZiLcf4'
 
 
 def get_user_from_token(request):
@@ -122,10 +130,60 @@ class SubscribeView(APIView):
 
     def post(self, request, *args, **kwargs):
         user = get_user_from_token(request)
-        print(request.data)
-        return Response({
-            'test': True,
-        })
+        membership = user.membership
+
+        try:
+
+            # get the stripe customer
+            customer = stripe.Customer.retrieve(user.stripe_customer_id)
+            serializer = SubscribeSerializer(data=request.data)
+
+            # serialize post data (stripeToken)
+            if serializer.is_valid():
+
+                # get stripeToken from serializer data
+                stripe_token = serializer.data.get('stripeToken')
+
+                # create the stripe subscription
+                subscription = stripe.Subscription.create(
+                    customer=customer.id,
+                    items=[{"plan": settings.STRIPE_PLAN_ID}]
+                )
+
+                # update the membership
+                membership.stripe_subscription_id = subscription.id
+                membership.stripe_subscription_item_id = subscription['items']['data'][0]['id']
+                membership.type = 'M'
+                membership.start_date = datetime.datetime.now()
+                membership.end_date = datetime.datetime.fromtimestamp(
+                    subscription.current_period_end
+                )
+                membership.save()
+
+                # update the user
+                user.is_member = True
+                user.on_free_trial = False
+                user.save()
+
+                # create the payment
+                payment = Payment()
+                payment.amount = subscription.plan.amount / 100
+                payment.user = user
+                payment.save()
+
+                return Response({'message': "success"}, status=HTTP_200_OK)
+
+            else:
+                return Response({'message': "Incorrect data was received"}, status=HTTP_400_BAD_REQUEST)
+
+        except stripe.error.CardError as e:
+            return Response({"message": "Your card has been declined."}, status=HTTP_400_BAD_REQUEST)
+        
+        except stripe.error.StripeError as e:
+            return Response({"message": "There was an error. You have not been billed. If this persists please contact support"}, status=HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response({"message": "We apologize for the error. We have been informed and are working on the problem."}, status=HTTP_400_BAD_REQUEST)
 
 
 class ImageRecognitionView(APIView):
