@@ -93,4 +93,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # Stripe plan ID
 
-STRIPE_PLAN_ID = 'facial_monthly_api_call'
+STRIPE_PLAN_ID = 'price_1JVZNbGjLUpjNrZJoxZiLcf4'
+#STRIPE_PLAN_ID = 'facial_monthly_api_call'

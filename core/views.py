@@ -1,4 +1,5 @@
 import datetime
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth import get_user_model, authenticate
 
@@ -13,8 +14,11 @@ from .permissions import IsMember
 from .models import Membership, TrackedRequest
 from .serializers import ChangeEmailSerializer, ChangePasswordSerializer, FileSerializer, TokenSerializer
 
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 User = get_user_model()
+stripe_plan_id = 'price_1JVZNbGjLUpjNrZJoxZiLcf4'
 
 
 def get_user_from_token(request):

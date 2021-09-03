@@ -1,6 +1,6 @@
 let DEBUG = true;
 let host = "http://127.0.0.1:8000";
-let stripePublishKey = "";
+let stripePublishKey = "pk_test_51HVHJwGjLUpjNrZJDqvwOaunx2iEyXPdWmePrvoXFBbr8qDXcp9csZyVXNkxOYZCAfcDWWbFXo8QE7teREJEAaTC00yl1qLyO4";
 
 if (DEBUG === false) {
   host = "";
