@@ -193,6 +193,28 @@ class SubscribeView(APIView):
             return Response({"message": "We apologize for the error. We have been informed and are working on the problem."}, status=HTTP_400_BAD_REQUEST)
 
 
+class CancelSubscription(APIView):
+    permission_classes = (IsMember, )
+
+    def post(self, request, *args, **kwargs):
+        user = get_user_from_token(request)
+        membership = user.membership
+
+        try:
+            sub = stripe.Subscription.retrieve(membership.stripe_subscription_id)
+            sub.delete()
+        except Exception as e:
+            return Response({"message": "We apologize for the error. We have been informed and are working on the problem."}, status=HTTP_400_BAD_REQUEST)
+
+        user.is_member = False
+        user.save()
+
+        membership.type = "N"
+        membership.save()
+
+        return Response({'message': "Your subscription has been cancelled."}, status=HTTP_200_OK)
+
+
 class ImageRecognitionView(APIView):
     permission_classes = (IsMember, )
 
